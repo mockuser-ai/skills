@@ -75,6 +75,22 @@ or more `.spec.ts` files, runs them in the cloud Playwright runner against
 the tunneled app, and prints a results summary plus a dashboard URL where
 you can replay video and traces for every test.
 
+## Projects (automatic — nothing to ask the user)
+
+The first time you run `tunnel` or `generate` in a repo, mockuser links it to a
+**project** and writes `.mockuser/settings.json` (commit it — it carries the
+project id so teammates and your other machines share the same project) plus a
+gitignored `.mockuser/settings.local.json`. This is fully automatic:
+
+- **Don't ask the user for a project name** — it's derived from the repo.
+- **Don't ask which branch** — it's read from git (`git branch --show-current`)
+  and every run is recorded under its project + branch.
+- It must be a **git repo with at least one commit** — the project is anchored to
+  the root commit. If mockuser says there are no commits, ask the user to make an
+  initial commit first.
+
+Runs show up grouped by project → branch in the dashboard.
+
 ## What `generate` needs
 
 - A running dev server on the port you pass with `-p`
@@ -90,7 +106,7 @@ When `generate` finishes you'll see:
 
 ```
 Tests complete: 4 passed, 1 failed (5 total)
-View results: http://localhost:3000/dashboard/runs/<id>
+View results: http://localhost:3000/dashboard/runs/<projectId>/<id>
 ```
 
 The dashboard page embeds Playwright's HTML report — click any test to see
