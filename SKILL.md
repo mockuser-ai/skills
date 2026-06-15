@@ -68,6 +68,9 @@ mockuser tunnel -p 3000
 
 # 3. With your changes uncommitted, generate and run tests
 mockuser generate -p 3000
+
+# Optionally steer what gets tested with -m / --context
+mockuser generate -p 3000 -m "focus on the login form validation errors"
 ```
 
 `generate` does everything in one shot: streams agent progress, writes one
@@ -129,6 +132,11 @@ existing session — safe to call before each `generate`.
 
 - **Don't commit before running generate.** It needs the uncommitted diff
   to know what to test.
+- **Use `-m`/`--context` to focus the run** when the diff is large or you
+  care about a specific flow (e.g. `-m "only the checkout happy path"`). It
+  steers which files the agent explores and which scenarios it covers — this
+  produces more relevant tests and keeps the run lean. Optional; omit it to
+  let the agent infer everything from the diff.
 - **The dev server has to be reachable** at `localhost:<port>`. If it isn't
   running, ask the user to start it first — don't assume.
 - **Test failures aren't infra failures.** A failed test means the
